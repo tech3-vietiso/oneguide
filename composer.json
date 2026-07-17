@@ -1,0 +1,21 @@
+{
+    "name": "vietiso/oneguide",
+    "description": "SDK PHP tích hợp với hệ thống OneGuide: đồng bộ tour điều hành, gán hướng dẫn viên, truy vấn danh mục.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Vietiso\\OneGuide\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Thuan Nguyen",
+            "email": "thuanvp012van@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-curl": "*",
+        "ext-json": "*"
+    }
+}
