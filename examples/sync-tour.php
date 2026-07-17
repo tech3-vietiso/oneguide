@@ -27,9 +27,9 @@ require '../vendor/autoload.php';
 
 // Khởi tạo Client với thông tin xác thực và địa chỉ API.
 $client = new Client([
-    'api_key' => 'ogk_uKrDG0SBVpm9686JgNJvzzaHfrEWzhvG',
-    'secret' => 'EMOrEdtUAurgTRmp6d1h6MTurmvHm3HYXniKu4gb1emwH9jN',
-    'url' => 'http://localhost:9095/api'
+    'api_key' => 'xxxxxxxxx',
+    'secret' => 'xxxxxxxxxxxxx',
+    'url' => 'https://xxxxxxxxxxxxx'
 ]);
 
 // --- Thông tin chung của tour ---
