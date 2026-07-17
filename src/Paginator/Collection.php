@@ -42,7 +42,7 @@ class Collection implements IteratorAggregate
     private function getNextPage(): void
     {
         $params = $this->params;
-        $params['next_cursor'] = $this->getNextCursor();
+        $params['cursor'] = $this->getNextCursor();
         $this->response = $this->client->send($this->endpoint, $params);
     }
 

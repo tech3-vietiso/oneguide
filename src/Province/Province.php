@@ -16,11 +16,11 @@ class Province
 
     public function list(?string $countryCode = null, int $limit = 10, ?string $nextCursor = null): Collection
     {
-        $endpoint = "provinces";
+        $endpoint = 'integration-provinces';
         $params = [
             'country_code' => $countryCode,
             'limit' => $limit,
-            'next_cursor' => $nextCursor
+            'cursor' => $nextCursor
         ];
         $response = $this->client->send($endpoint, $params);
         return new Collection($this->client, $response, $endpoint, $params);
