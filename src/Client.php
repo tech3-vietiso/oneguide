@@ -32,8 +32,8 @@ class Client
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json',
                 'Accept: application/json',
-                'X-Api-Key: ' . $this->apiKey,
-                'X-Api-Secret: ' . $this->secret,
+                "X-Api-Key: {$this->apiKey}",
+                "X-Api-Secret: {$this->secret}",
             ],
         ]);
 
