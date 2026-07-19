@@ -180,10 +180,8 @@ class Tour
 
     public function addGuide(Guide $guide, array $days): self
     {
-        $this->guides[] = [
-            'guide' => $guide,
-            'days' => $days
-        ];
+        $guide->setDays($days);
+        $this->guides[] = $guide;
         return $this;
     }
 
@@ -239,14 +237,13 @@ class Tour
 
     public function syncGuides()
     {
-        $guides = array_map(static function ($item) {
-            $item['guide'] = $item['guide']->toArray();
-            return $item;
+        $guides = array_map(static function ($guide) {
+            return $guide->toArray();
         }, $this->getGuides());
 
         $this->validateSyncGuide($guides);
 
-        $this->client->send("tour/{$this->getId()}/sync-guides", [
+        $this->client->send("integration-tours/{$this->getId()}/sync-guides", [
             'guides' => $guides
         ]);
     }
@@ -368,8 +365,7 @@ class Tour
 
     private function validateSyncGuide(array $guides): void
     {
-        foreach ($guides as $item) {
-            $guide = $item['guide'] ?? [];
+        foreach ($guides as $guide) {
             $numberCard = $guide['number_card'] ?? null;
             $email = $guide['email'] ?? null;
             $phone = $guide['phone'] ?? null;

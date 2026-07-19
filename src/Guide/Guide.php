@@ -12,6 +12,8 @@ class Guide implements Arrayable
 
     private ?string $phone = null;
 
+    private ?array $days = null;
+
     public function __construct(string $numberCard)
     {
         $this->numberCard = $numberCard; 
@@ -50,12 +52,24 @@ class Guide implements Arrayable
         return $this->email;
     }
 
+    public function setDays(array $days): self
+    {
+        $this->days = $days;
+        return $this;
+    }
+
+    public function getDays(): ?array
+    {
+        return $this->days;
+    }
+
     public function toArray(): array
     {
         return [
             'number_card' => $this->getNumberCard(),
             'phone' => $this->getPhone(),
-            'email' => $this->getEmail()
+            'email' => $this->getEmail(),
+            'days' => $this->getDays()
         ];
     }
 }
