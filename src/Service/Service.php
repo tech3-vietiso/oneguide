@@ -14,7 +14,15 @@ class Service implements Arrayable
 
     private ?string $address = null;
 
+    private ?string $note = null;
+
     private ?array $days = null;
+
+    private ?string $companyName = null;
+
+    private ?string $companyPhone = null;
+
+    private ?string $companyEmail = null;
 
     public function setId(string $id): self
     {
@@ -71,6 +79,50 @@ class Service implements Arrayable
         return $this->days;
     }
 
+    public function setCompanyName(string $companyName)
+    {
+        $this->companyName = $companyName;
+        return $this;
+    }
+
+    public function getCompanyName(): ?string
+    {
+        return $this->companyName;
+    }
+
+    public function setCompanyPhone(string $companyPhone)
+    {
+        $this->companyPhone = $companyPhone;
+        return $this;
+    }
+
+    public function getCompanyPhone(): ?string
+    {
+        return $this->companyPhone;
+    }
+
+    public function setCompanyEmail(string $companyEmail)
+    {
+        $this->companyEmail = $companyEmail;
+        return $this;
+    }
+
+    public function getCompanyEmail(): ?string
+    {
+        return $this->companyEmail;
+    }
+
+    public function setNote(string $note)
+    {
+        $this->note = $note;
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
     public function toArray(): array
     {
         return [
@@ -78,7 +130,11 @@ class Service implements Arrayable
             'title' => $this->getTitle(),
             'type' => $this->getType(),
             'address' => $this->getAddress(),
-            'days' => $this->getTourDays()
+            'note' => $this->getNote(),
+            'days' => $this->getTourDays(),
+            'company_name' => $this->getCompanyName(),
+            'company_phone' => $this->getCompanyPhone(),
+            'company_email' => $this->getCompanyEmail(),
         ];
     }
 }
