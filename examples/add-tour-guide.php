@@ -26,16 +26,16 @@ $client = new Client([
 ]);
 
 // Danh sách hướng dẫn viên cần gán cho tour.
-// - number_card: số thẻ hướng dẫn viên (bắt buộc, dùng để định danh).
+// - card_number: số thẻ hướng dẫn viên (bắt buộc, dùng để định danh).
 // - phone / email: thông tin liên hệ (email là bắt buộc khi đồng bộ).
 $guides = [
     [
-        'number_card' => 148235149,
+        'card_number' => 148235149,
         'phone' => '0327145495',
         'email' => 'nguyenhonghanh@gmail.com'
     ],
     [
-        'number_card' => 201265735,
+        'card_number' => 201265735,
         'phone' => '0945385168',
         'email' => 'nguyenhonghanh1@gmail.com'
     ]
@@ -48,7 +48,7 @@ $tour->setId(111);
 // Bước 3: Duyệt danh sách và thêm từng hướng dẫn viên vào tour.
 foreach ($guides as $item) {
     // Khởi tạo Guide với số thẻ.
-    $guide = new Guide($item['number_card']);
+    $guide = new Guide($item['card_number']);
 
     // Chỉ gán số điện thoại khi có dữ liệu.
     if (!empty($item['phone'])) {

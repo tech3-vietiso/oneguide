@@ -178,9 +178,11 @@ class Tour
         return $this->operators;
     }
 
-    public function addGuide(Guide $guide, array $days): self
+    public function addGuide(Guide $guide, array $days = []): self
     {
-        $guide->setDays($days);
+        if (!empty($days)) {
+            $guide->setDays($days);
+        }
         $this->guides[] = $guide;
         return $this;
     }
@@ -244,6 +246,25 @@ class Tour
         $this->validateSyncGuide($guides);
 
         $this->client->send("integration-tours/{$this->getId()}/sync-guides", [
+            'guides' => $guides
+        ]);
+    }
+
+    public function syncAdvances()
+    {
+        $guides = array_map(static function ($guide) {
+            $guide = $guide->toArray();
+
+            if (!empty($guide['advances'])) {
+                $guide['advances'] = array_map(static function ($advance) {
+                    return $advance->toArray();
+                }, $guide['advances']);
+            }
+
+            return array_filter($guide);
+        }, $this->getGuides());
+
+        $this->client->send("integration-tours/{$this->getId()}/sync-advances", [
             'guides' => $guides
         ]);
     }
@@ -366,19 +387,19 @@ class Tour
     private function validateSyncGuide(array $guides): void
     {
         foreach ($guides as $guide) {
-            $numberCard = $guide['number_card'] ?? null;
+            $cardNumber = $guide['card_number'] ?? null;
             $email = $guide['email'] ?? null;
             $phone = $guide['phone'] ?? null;
 
             if (empty($email)) {
-                throw new ValidationException("Guide with number card \"{$numberCard}\": email is required.");
+                throw new ValidationException("Guide with number card \"{$cardNumber}\": email is required.");
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new ValidationException("Guide with number card \"{$numberCard}\": email \"{$email}\" is invalid.");
+                throw new ValidationException("Guide with number card \"{$cardNumber}\": email \"{$email}\" is invalid.");
             }
 
-            $this->assertPhoneLength($phone, "Guide with number card \"{$numberCard}\"");
+            $this->assertPhoneLength($phone, "Guide with number card \"{$cardNumber}\"");
         }
     }
 }

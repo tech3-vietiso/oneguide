@@ -6,7 +6,7 @@ use Vietiso\OneGuide\Arrayable;
 
 class Guide implements Arrayable
 {
-    private string $numberCard;
+    private string $cardNumber;
 
     private ?string $email = null;
 
@@ -14,20 +14,22 @@ class Guide implements Arrayable
 
     private ?array $days = null;
 
-    public function __construct(string $numberCard)
+    private ?array $advances = null;
+
+    public function __construct(string $cardNumber)
     {
-        $this->numberCard = $numberCard; 
+        $this->cardNumber = $cardNumber; 
     }
 
-    public function setNumberCard(string $numberCard): self
+    public function setCardNumber(string $cardNumber): self
     {
-        $this->numberCard = $numberCard;
+        $this->cardNumber = $cardNumber;
         return $this;
     }
 
-    public function getNumberCard(): string
+    public function getCardNumber(): string
     {
-        return $this->numberCard;
+        return $this->cardNumber;
     }
 
     public function setPhone(string $phone): self
@@ -63,13 +65,25 @@ class Guide implements Arrayable
         return $this->days;
     }
 
+    public function addAdvance(Advance $advance)
+    {
+        $this->advances[] = $advance;
+        return $this;
+    }
+
+    public function getAdvances(): ?array
+    {
+        return $this->advances;
+    }
+
     public function toArray(): array
     {
         return [
-            'number_card' => $this->getNumberCard(),
+            'card_number' => $this->getCardNumber(),
             'phone' => $this->getPhone(),
             'email' => $this->getEmail(),
-            'days' => $this->getDays()
+            'days' => $this->getDays(),
+            'expenses' => $this->getAdvances(),
         ];
     }
 }

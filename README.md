@@ -107,7 +107,7 @@ use Vietiso\OneGuide\Guide\Guide;
 $tour = new Tour($client);
 $tour->setId(111); // ID tour cần gán
 
-$guide = new Guide('148235149'); // number_card: số thẻ hướng dẫn viên
+$guide = new Guide('148235149'); // card_number: số thẻ hướng dẫn viên
 $guide->setEmail('guide@example.com'); // Email bắt buộc & phải hợp lệ
 $guide->setPhone('0327145495');
 
