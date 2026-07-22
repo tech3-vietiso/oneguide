@@ -119,7 +119,44 @@ $tour->syncGuides();
 
 Xem đầy đủ tại [examples/add-tour-guide.php](examples/add-tour-guide.php).
 
-### 3. Lấy danh mục có phân trang (tỉnh/thành)
+### 3. Đồng bộ tạm ứng cho hướng dẫn viên
+
+Đồng bộ danh sách tạm ứng (chi phí ứng trước) của hướng dẫn viên cho một tour đã tồn tại. Mỗi hướng dẫn viên có thể có nhiều khoản tạm ứng.
+
+Các trường **bắt buộc** khi gọi `syncAdvances()`:
+
+- `card_number` của hướng dẫn viên (`new Guide(...)`).
+- Mỗi khoản tạm ứng (`Advance`): `external_expense_id` (`setId`), `expense_code` (`setCode`), `tour_service_id` (`setServiceId`) và `amount` (`setAmount`).
+
+```php
+use Vietiso\OneGuide\Tour\Tour;
+use Vietiso\OneGuide\Guide\Guide;
+use Vietiso\OneGuide\Guide\Advance;
+
+$tour = new Tour($client);
+$tour->setId(111); // ID tour cần đồng bộ
+
+$guide = new Guide('101153183'); // card_number: số thẻ hướng dẫn viên (bắt buộc)
+
+// Thêm một hoặc nhiều khoản tạm ứng cho hướng dẫn viên
+$guide->addAdvance(
+    (new Advance())
+        ->setId(1001)                 // ID tạm ứng bên hệ thống của bạn (bắt buộc)
+        ->setCode('ADV001')           // Mã tạm ứng (bắt buộc)
+        ->setServiceId(222)           // ID dịch vụ trong tour (bắt buộc)
+        ->setAmount(5000000)          // số tiền tạm ứng (bắt buộc)
+        ->setCurrency('VND')          // Tùy chọn, mặc định là VND
+        ->setNote('Tạm ứng đợt 1')   // Tùy chọn
+);
+
+$tour->addGuide($guide);
+
+$tour->syncAdvances(); // Ném ValidationException nếu thiếu trường bắt buộc
+```
+
+Xem đầy đủ tại [examples/sync-guide-advances.php](examples/sync-guide-advances.php).
+
+### 4. Lấy danh mục có phân trang (tỉnh/thành)
 
 API trả về dữ liệu theo con trỏ (cursor). `list()` trả về một `Collection`; có thể duyệt trực tiếp bằng `foreach` (tự động lấy trang tiếp theo) hoặc lặp thủ công.
 
@@ -185,4 +222,5 @@ Thư mục [examples/](examples/) chứa các ví dụ chạy được kèm chú
 
 - [sync-tour.php](examples/sync-tour.php) — đẩy tour điều hành đầy đủ.
 - [add-tour-guide.php](examples/add-tour-guide.php) — gán hướng dẫn viên cho tour.
+- [sync-guide-advances.php](examples/sync-guide-advances.php) — đồng bộ tạm ứng cho hướng dẫn viên.
 - [get-province.php](examples/get-province.php) — lấy danh sách tỉnh/thành có phân trang.

@@ -252,13 +252,15 @@ class Tour
 
     public function syncAdvances()
     {
+        $this->validateSyncAdvances();
+
         $guides = array_map(static function ($guide) {
             $guide = $guide->toArray();
 
-            if (!empty($guide['advances'])) {
-                $guide['advances'] = array_map(static function ($advance) {
+            if (!empty($guide['expenses'])) {
+                $guide['expenses'] = array_map(static function ($advance) {
                     return $advance->toArray();
-                }, $guide['advances']);
+                }, $guide['expenses']);
             }
 
             return array_filter($guide);
@@ -400,6 +402,41 @@ class Tour
             }
 
             $this->assertPhoneLength($phone, "Guide with number card \"{$cardNumber}\"");
+        }
+    }
+
+    private function validateSyncAdvances(): void
+    {
+        foreach ($this->getGuides() as $guide) {
+            $cardNumber = $guide->getCardNumber();
+
+            if (empty($cardNumber)) {
+                throw new ValidationException('Guide: card number is required.');
+            }
+
+            $advances = $guide->getAdvances();
+
+            if (empty($advances)) {
+                throw new ValidationException("Guide with card number \"{$cardNumber}\": at least one advance is required.");
+            }
+
+            foreach ($advances as $advance) {
+                if (empty($advance->getId())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": advance external_expense_id is required.");
+                }
+
+                if (empty($advance->getCode())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": advance expense_code is required.");
+                }
+
+                if (empty($advance->getServiceId())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": advance tour_service_id is required.");
+                }
+
+                if (empty($advance->getAmount())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": advance amount is required.");
+                }
+            }
         }
     }
 }
