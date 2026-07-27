@@ -11,6 +11,8 @@ class Itinerary implements Arrayable
 
     private int $dayNumber;
 
+    private ?string $content = null;
+
     private ?string $image = null;
 
     private array $guides = [];
@@ -37,6 +39,17 @@ class Itinerary implements Arrayable
     public function getDayNumber(): int
     {
         return $this->dayNumber;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
     }
 
     public function setImage(string $image): self
@@ -81,6 +94,7 @@ class Itinerary implements Arrayable
         return [
             'title' => $this->getTitle(),
             'day_number' => $this->getDayNumber(),
+            'content' => $this->getContent(),
             'image' => $this->getImage(),
             'guides' => $guides,
             'provinces' => $this->getProvinces()

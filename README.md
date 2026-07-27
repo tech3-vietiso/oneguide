@@ -72,6 +72,7 @@ $tour->addItinerary(
     (new Itinerary())
         ->setTitle('Ngày 1')
         ->setDayNumber(1)
+        ->setContent('Đón khách tại sân bay, ăn trưa, tham quan phố cổ.') // Tùy chọn, nội dung chi tiết
         ->setImage('https://example.com/day1.jpg') // Phải là URL hợp lệ
 );
 

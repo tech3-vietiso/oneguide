@@ -60,12 +60,14 @@ $tour
 // Mỗi Itinerary là chương trình của một ngày:
 // - setTitle: tiêu đề ngày.
 // - setDayNumber: ngày thứ mấy trong tour.
+// - setContent: nội dung chi tiết của ngày (tùy chọn).
 // - setImage: ảnh minh họa (phải là URL hợp lệ).
 // (Tour phải có ít nhất một hành trình thì mới đồng bộ được.)
 foreach (range(1, 10) as $day) {
     $itinerary = (new Itinerary())
         ->setTitle("Ngày {$day}")
         ->setDayNumber($day)
+        ->setContent("Nội dung chương trình ngày {$day}.")
         ->setImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ZKKCrxGI3_okyphTf2K1lOmWRlOVzBycsYgu3aX7rQ&s=10');
     $tour->addItinerary($itinerary);
 }
