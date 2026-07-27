@@ -266,7 +266,7 @@ class Tour
             return array_filter($guide);
         }, $this->getGuides());
 
-        $this->client->send("integration-tours/{$this->getId()}/sync-advances", [
+        $this->client->send("integration-tours/{$this->getId()}/sync-expenses", [
             'guides' => $guides
         ]);
     }
