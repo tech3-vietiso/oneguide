@@ -1,6 +1,8 @@
 <?php
 
 use Vietiso\OneGuide\Client;
+use Vietiso\OneGuide\Tour\Gender;
+use Vietiso\OneGuide\Tour\Member;
 use Vietiso\OneGuide\Tour\Operator;
 use Vietiso\OneGuide\Tour\Itinerary;
 use Vietiso\OneGuide\Tour\Tour;
@@ -22,6 +24,7 @@ require '../vendor/autoload.php';
  *   - Hành trình theo ngày (Itinerary).
  *   - Dịch vụ đi kèm (Service).
  *   - Điều hành viên phụ trách (Operator).
+ *   - Thành viên trong đoàn (Member).
  * Cuối cùng gọi sync() để validate và gửi toàn bộ lên API.
  */
 
@@ -100,6 +103,29 @@ $operator = (new Operator())
     ->setPhone('0325305738')
     ->setAvatar('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ZKKCrxGI3_okyphTf2K1lOmWRlOVzBycsYgu3aX7rQ&s=10');
 $tour->addOperator($operator);
+
+// --- Thành viên trong đoàn ---
+// (Tour không bắt buộc phải có thành viên; không thêm ai thì vẫn đồng bộ bình thường.)
+// Nếu có thêm, bắt buộc: setId (ID thành viên bên hệ thống của bạn) và setFullName (họ tên).
+// Tùy chọn: setBirthday, setPhone, setEmail, setPassportNumber, setPassportExpiryDate,
+//           setIdentityCardNumber (CCCD),
+//           setGender (Gender::MALE | FEMALE | OTHER),
+//           setCountryId (ID quốc gia bên OneGuide), setNote.
+// Trường tùy chọn nào không set sẽ được lược khỏi dữ liệu gửi đi.
+$tour->addMember(
+    (new Member())
+        ->setId(9001)
+        ->setFullName('Nguyễn Văn A')
+        ->setBirthday(new DateTime('1990-05-20'))
+        ->setPhone('0325305738')
+        ->setEmail('a@example.com')
+        ->setPassportNumber('C1234567')
+        ->setPassportExpiryDate(new DateTime('2030-12-31'))
+        ->setIdentityCardNumber('001090012345')
+        ->setGender(Gender::MALE)
+        ->setCountryId(1)
+        ->setNote('Trưởng đoàn')
+);
 
 // Đẩy toàn bộ tour lên OneGuide.
 // sync() sẽ validate dữ liệu trước (bắt buộc, đúng định dạng...) rồi mới gửi;

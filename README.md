@@ -43,13 +43,15 @@ Client tự thêm header `X-Api-Key` và `X-Api-Secret` vào mỗi request.
 
 > **Lưu ý:** đây là tour **đã chuyển sang điều hành** (bắt buộc có ít nhất một điều hành viên), không phải tour chưa chuyển điều hành.
 
-Một tour điều hành gồm: thông tin chung, hành trình theo ngày (`Itinerary`), dịch vụ (`Service`) và điều hành viên (`Operator`).
+Một tour điều hành gồm: thông tin chung, hành trình theo ngày (`Itinerary`), dịch vụ (`Service`), điều hành viên (`Operator`) và thành viên trong đoàn (`Member`).
 
 ```php
 use Vietiso\OneGuide\Tour\Tour;
 use Vietiso\OneGuide\Tour\TourType;
 use Vietiso\OneGuide\Tour\Itinerary;
 use Vietiso\OneGuide\Tour\Operator;
+use Vietiso\OneGuide\Tour\Member;
+use Vietiso\OneGuide\Tour\Gender;
 use Vietiso\OneGuide\Service\Service;
 use Vietiso\OneGuide\Service\ServiceType;
 
@@ -90,9 +92,28 @@ $tour->addOperator(
         ->setAvatar('https://example.com/avatar.jpg')
 );
 
+// Thành viên trong đoàn (không bắt buộc; đồng bộ chung trong sync())
+// Nếu có thêm thành viên thì bắt buộc: setId (ID bên hệ thống của bạn) và setFullName.
+$tour->addMember(
+    (new Member())
+        ->setId(9001)
+        ->setFullName('Nguyễn Văn A')
+        ->setBirthday(new DateTime('1990-05-20')) // Tùy chọn, đối tượng DateTime
+        ->setPhone('0325305738')                  // Tùy chọn, tối đa 20 ký tự
+        ->setEmail('a@example.com')               // Tùy chọn, phải hợp lệ nếu có
+        ->setPassportNumber('C1234567')                     // Tùy chọn, số hộ chiếu
+        ->setPassportExpiryDate(new DateTime('2030-12-31')) // Tùy chọn, ngày hết hạn hộ chiếu
+        ->setIdentityCardNumber('001090012345')             // Tùy chọn, số CCCD
+        ->setGender(Gender::MALE)                 // Tùy chọn: MALE | FEMALE | OTHER
+        ->setCountryId(1)                         // Tùy chọn, ID quốc gia bên OneGuide
+        ->setNote('Trưởng đoàn')                  // Tùy chọn
+);
+
 // Validate rồi đẩy lên OneGuide (ném ValidationException nếu dữ liệu sai/thiếu)
 $tour->sync();
 ```
+
+Thành viên được gửi kèm trong chính payload của `sync()` (khóa `guests`), không có endpoint riêng. Danh sách này **không bắt buộc** — tour không có thành viên nào vẫn đồng bộ được (`guests` sẽ là mảng rỗng). Trường tùy chọn nào không set cũng được lược khỏi payload.
 
 Xem đầy đủ tại [examples/sync-tour.php](examples/sync-tour.php).
 
@@ -216,11 +237,17 @@ try {
 | `SIC` | 2 | `SIC` | 2 |
 | `OUTBOUND` | 3 | `OUTBOUND` | 3 |
 
+| Giới tính (`Gender`) | Giá trị |
+| --- | --- |
+| `MALE` | 1 |
+| `FEMALE` | 2 |
+| `OTHER` | 3 |
+
 ## Ví dụ
 
 Thư mục [examples/](examples/) chứa các ví dụ chạy được kèm chú thích chi tiết:
 
-- [sync-tour.php](examples/sync-tour.php) — đẩy tour điều hành đầy đủ.
+- [sync-tour.php](examples/sync-tour.php) — đẩy tour điều hành đầy đủ (kèm thành viên trong đoàn).
 - [add-tour-guide.php](examples/add-tour-guide.php) — gán hướng dẫn viên cho tour.
 - [sync-guide-advances.php](examples/sync-guide-advances.php) — đồng bộ tạm ứng cho hướng dẫn viên.
 - [get-province.php](examples/get-province.php) — lấy danh sách tỉnh/thành có phân trang.

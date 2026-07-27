@@ -39,6 +39,8 @@ class Tour
 
     private array $services = [];
 
+    private array $members = [];
+
     private Client $client;
 
     public function __construct(Client $client)
@@ -203,6 +205,17 @@ class Tour
         return $this->services;
     }
 
+    public function addMember(Member $member): self
+    {
+        $this->members[] = $member;
+        return $this;
+    }
+
+    public function getMembers(): array
+    {
+        return $this->members;
+    }
+
     public function sync()
     {
         $this->validateSyncTour();
@@ -219,6 +232,12 @@ class Tour
             return $service->toArray();
         }, $this->getServices());
 
+        $members = array_map(static function ($member) {
+            return array_filter($member->toArray(), static function ($value) {
+                return $value !== null;
+            });
+        }, $this->getMembers());
+
         $tour = [
             'external_tour_id' => $this->getId(),
             'name' => $this->getTitle(),
@@ -232,7 +251,8 @@ class Tour
             'number_children' => $this->getNumberChildren(),
             'itineraries' => $itineraries,
             'operators' => $operators,
-            'services' => $services
+            'services' => $services,
+            'guests' => $members
         ];
         $this->client->send('integration-tours', $tour);
     }
@@ -335,6 +355,10 @@ class Tour
         foreach ($this->services as $service) {
             $this->assertService($service);
         }
+
+        foreach ($this->members as $member) {
+            $this->assertMember($member);
+        }
     }
 
     private function assertService(Service $service): void
@@ -370,6 +394,33 @@ class Tour
                 );
             }
         }
+    }
+
+    private function assertMember(Member $member): void
+    {
+        $id = $member->getId();
+
+        if (empty($id)) {
+            throw new ValidationException('Member: id is required.');
+        }
+
+        if (empty($member->getFullName())) {
+            throw new ValidationException("Member \"{$id}\": full name is required.");
+        }
+
+        $gender = $member->getGender();
+
+        if (!empty($gender) && !in_array($gender, [Gender::MALE, Gender::FEMALE, Gender::OTHER], true)) {
+            throw new ValidationException("Member \"{$id}\": gender \"{$gender}\" is invalid.");
+        }
+
+        $email = $member->getEmail();
+
+        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new ValidationException("Member \"{$id}\": email \"{$email}\" is invalid.");
+        }
+
+        $this->assertPhoneLength($member->getPhone(), "Member \"{$id}\"");
     }
 
     private function assertImageUrl(?string $image, string $label): void
@@ -439,4 +490,5 @@ class Tour
             }
         }
     }
+
 }
