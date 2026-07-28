@@ -81,6 +81,8 @@ $tour->addService(
     (new Service())
         ->setType(ServiceType::SIC)
         ->setTitle('Dịch vụ test')
+        ->setQuantity(2)          // Tùy chọn, số lượng (> 0)
+        ->setAmount(1500000)      // Tùy chọn, số tiền (>= 0)
         ->setTourDays([1, 2, 3])
 );
 

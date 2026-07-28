@@ -18,6 +18,10 @@ class Service implements Arrayable
 
     private ?array $days = null;
 
+    private ?int $quantity = null;
+
+    private ?float $amount = null;
+
     private ?string $companyName = null;
 
     private ?string $companyPhone = null;
@@ -79,6 +83,28 @@ class Service implements Arrayable
         return $this->days;
     }
 
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setAmount(float $amount): self
+    {
+        $this->amount = $amount;
+        return $this;
+    }
+
+    public function getAmount(): ?float
+    {
+        return $this->amount;
+    }
+
     public function setCompanyName(string $companyName)
     {
         $this->companyName = $companyName;
@@ -132,6 +158,8 @@ class Service implements Arrayable
             'address' => $this->getAddress(),
             'note' => $this->getNote(),
             'days' => $this->getTourDays(),
+            'quantity' => $this->getQuantity(),
+            'amount' => $this->getAmount(),
             'company_name' => $this->getCompanyName(),
             'company_phone' => $this->getCompanyPhone(),
             'company_email' => $this->getCompanyEmail(),

@@ -377,6 +377,18 @@ class Tour
             throw new ValidationException("Service \"{$title}\": type is required.");
         }
 
+        $quantity = $service->getQuantity();
+
+        if ($quantity !== null && $quantity < 1) {
+            throw new ValidationException("Service \"{$title}\": quantity must be greater than 0.");
+        }
+
+        $amount = $service->getAmount();
+
+        if ($amount !== null && $amount < 0) {
+            throw new ValidationException("Service \"{$title}\": amount must be greater than or equal to 0.");
+        }
+
         $days = $service->getTourDays();
 
         if (empty($days)) {

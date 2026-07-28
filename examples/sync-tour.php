@@ -76,12 +76,16 @@ foreach (range(1, 10) as $day) {
 // - setType: loại dịch vụ, dùng hằng số trong ServiceType.
 // - setTitle: tên dịch vụ.
 // - setTourDays: các ngày trong tour áp dụng dịch vụ này.
+// - setQuantity: số lượng dịch vụ (tùy chọn, phải > 0).
+// - setAmount: số tiền của dịch vụ (tùy chọn, phải >= 0).
 $service = new Service();
 $service
     ->setType(ServiceType::HOTEL)
     ->setId(123)
     ->setTitle('Dịch vụ test')
     ->setAddress('Hà Nội')
+    ->setQuantity(2)
+    ->setAmount(1500000)
     ->setTourDays([1, 2, 3]);
 $tour->addService($service);
 
@@ -91,6 +95,8 @@ $service
     ->setId(234)
     ->setTitle('Nhà hàng gì đó')
     ->setAddress('Hà Nội')
+    ->setQuantity(10)
+    ->setAmount(3000000)
     ->setTourDays([1, 2, 3]);
 $tour->addService($service);
 
