@@ -22,6 +22,8 @@ class Service implements Arrayable
 
     private ?float $amount = null;
 
+    private ?int $bookingStatus = null;
+
     private ?string $companyName = null;
 
     private ?string $companyPhone = null;
@@ -105,6 +107,17 @@ class Service implements Arrayable
         return $this->amount;
     }
 
+    public function setBookingStatus(int $bookingStatus): self
+    {
+        $this->bookingStatus = $bookingStatus;
+        return $this;
+    }
+
+    public function getBookingStatus(): ?int
+    {
+        return $this->bookingStatus;
+    }
+
     public function setCompanyName(string $companyName)
     {
         $this->companyName = $companyName;
@@ -160,6 +173,7 @@ class Service implements Arrayable
             'days' => $this->getTourDays(),
             'quantity' => $this->getQuantity(),
             'amount' => $this->getAmount(),
+            'booking_status' => $this->getBookingStatus(),
             'company_name' => $this->getCompanyName(),
             'company_phone' => $this->getCompanyPhone(),
             'company_email' => $this->getCompanyEmail(),

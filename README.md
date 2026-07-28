@@ -54,6 +54,7 @@ use Vietiso\OneGuide\Tour\Member;
 use Vietiso\OneGuide\Tour\Gender;
 use Vietiso\OneGuide\Service\Service;
 use Vietiso\OneGuide\Service\ServiceType;
+use Vietiso\OneGuide\Service\BookingStatus;
 
 // Thông tin chung
 $tour = new Tour($client);
@@ -76,14 +77,21 @@ $tour->addItinerary(
         ->setImage('https://example.com/day1.jpg') // Phải là URL hợp lệ
 );
 
-// Dịch vụ đi kèm
+// Dịch vụ đi kèm (không bắt buộc; nếu có thì bắt buộc: setId, setTitle, setType, setTourDays)
 $tour->addService(
     (new Service())
-        ->setType(ServiceType::SIC)
-        ->setTitle('Dịch vụ test')
-        ->setQuantity(2)          // Tùy chọn, số lượng (> 0)
-        ->setAmount(1500000)      // Tùy chọn, số tiền (>= 0)
-        ->setTourDays([1, 2, 3])
+        ->setId(123)                              // ID dịch vụ bên hệ thống của bạn (bắt buộc)
+        ->setTitle('Khách sạn Mường Thanh')       // Bắt buộc
+        ->setType(ServiceType::HOTEL)             // Bắt buộc, xem bảng ServiceType bên dưới
+        ->setTourDays([1, 2, 3])                  // Bắt buộc, không ngày nào được vượt quá setNumberDay
+        ->setQuantity(2)                          // Tùy chọn, số lượng (> 0)
+        ->setAmount(1500000)                      // Tùy chọn, số tiền (>= 0)
+        ->setBookingStatus(BookingStatus::BOOKED) // Tùy chọn, tình trạng đặt với nhà cung cấp: BOOKED (1) | NOT_BOOKED (0)
+        ->setAddress('Hà Nội')                    // Tùy chọn
+        ->setNote('Phòng đôi, view hồ')           // Tùy chọn
+        ->setCompanyName('Mường Thanh Hospitality')   // Tùy chọn, thông tin nhà cung cấp
+        ->setCompanyPhone('02438220099')              // Tùy chọn
+        ->setCompanyEmail('booking@muongthanh.com')   // Tùy chọn
 );
 
 // Điều hành viên (bắt buộc có ít nhất một)
@@ -116,7 +124,7 @@ $tour->addMember(
 $tour->sync();
 ```
 
-Thành viên được gửi kèm trong chính payload của `sync()` (khóa `guests`), không có endpoint riêng. Danh sách này **không bắt buộc** — tour không có thành viên nào vẫn đồng bộ được (`guests` sẽ là mảng rỗng). Trường tùy chọn nào không set cũng được lược khỏi payload.
+Dịch vụ và thành viên đều được gửi kèm trong chính payload của `sync()` (khóa `services` và `guests`), không có endpoint riêng. Cả hai danh sách này **không bắt buộc** — tour không có dịch vụ/thành viên nào vẫn đồng bộ được (gửi mảng rỗng). Riêng với thành viên, trường tùy chọn nào không set sẽ được lược khỏi payload; với dịch vụ thì trường không set gửi lên `null`.
 
 Xem đầy đủ tại [examples/sync-tour.php](examples/sync-tour.php).
 
@@ -234,17 +242,32 @@ try {
 
 ## Hằng số tham chiếu
 
-| Loại tour (`TourType`) | Giá trị | Loại dịch vụ (`ServiceType`) | Giá trị |
+| Loại tour (`TourType`) | Giá trị |
+| --- | --- |
+| `PRIVATE` | 1 |
+| `SIC` | 2 |
+| `OUTBOUND` | 3 |
+
+| Loại dịch vụ (`ServiceType`) | Giá trị | Loại dịch vụ (`ServiceType`) | Giá trị |
 | --- | --- | --- | --- |
-| `PRIVATE` | 1 | `PRIVATE` | 1 |
-| `SIC` | 2 | `SIC` | 2 |
-| `OUTBOUND` | 3 | `OUTBOUND` | 3 |
+| `HOTEL` (khách sạn) | 1 | `LANDTOUR` | 8 |
+| `RESTAURANT` (nhà hàng) | 2 | `BOAT` (thuyền) | 9 |
+| `CRUISE` (du thuyền) | 3 | `SIGHTSEEING_TICKET` (vé thắng cảnh) | 10 |
+| `CAR` (xe ô tô) | 4 | `BUS` | 11 |
+| `VISA` | 5 | `TRAIN` | 12 |
+| `VOUCHER` | 6 | `INSURANCE` (bảo hiểm) | 13 |
+| `FLIGHT_TICKET` (vé máy bay) | 7 | `OTHER` (dịch vụ khác) | 99 |
 
 | Giới tính (`Gender`) | Giá trị |
 | --- | --- |
 | `MALE` | 1 |
 | `FEMALE` | 2 |
 | `OTHER` | 3 |
+
+| Tình trạng đặt dịch vụ với nhà cung cấp (`BookingStatus`) | Giá trị |
+| --- | --- |
+| `NOT_BOOKED` (chưa đặt) | 0 |
+| `BOOKED` (đã đặt) | 1 |
 
 ## Ví dụ
 

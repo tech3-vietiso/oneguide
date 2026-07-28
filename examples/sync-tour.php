@@ -9,6 +9,7 @@ use Vietiso\OneGuide\Tour\Tour;
 use Vietiso\OneGuide\Tour\TourType;
 use Vietiso\OneGuide\Service\Service;
 use Vietiso\OneGuide\Service\ServiceType;
+use Vietiso\OneGuide\Service\BookingStatus;
 
 require '../vendor/autoload.php';
 
@@ -78,6 +79,10 @@ foreach (range(1, 10) as $day) {
 // - setTourDays: các ngày trong tour áp dụng dịch vụ này.
 // - setQuantity: số lượng dịch vụ (tùy chọn, phải > 0).
 // - setAmount: số tiền của dịch vụ (tùy chọn, phải >= 0).
+// - setBookingStatus: tình trạng đặt dịch vụ với nhà cung cấp, dùng hằng số trong
+//   BookingStatus (BOOKED = 1: đã đặt, NOT_BOOKED = 0: chưa đặt).
+// - setAddress / setNote: địa chỉ và ghi chú của dịch vụ (tùy chọn).
+// - setCompanyName / setCompanyPhone / setCompanyEmail: thông tin nhà cung cấp (tùy chọn).
 $service = new Service();
 $service
     ->setType(ServiceType::HOTEL)
@@ -86,6 +91,11 @@ $service
     ->setAddress('Hà Nội')
     ->setQuantity(2)
     ->setAmount(1500000)
+    ->setBookingStatus(BookingStatus::BOOKED)
+    ->setNote('Phòng đôi, view hồ')
+    ->setCompanyName('Mường Thanh Hospitality')
+    ->setCompanyPhone('02438220099')
+    ->setCompanyEmail('booking@muongthanh.com')
     ->setTourDays([1, 2, 3]);
 $tour->addService($service);
 
@@ -97,6 +107,7 @@ $service
     ->setAddress('Hà Nội')
     ->setQuantity(10)
     ->setAmount(3000000)
+    ->setBookingStatus(BookingStatus::NOT_BOOKED)
     ->setTourDays([1, 2, 3]);
 $tour->addService($service);
 

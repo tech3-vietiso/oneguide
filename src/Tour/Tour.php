@@ -3,6 +3,7 @@
 namespace Vietiso\OneGuide\Tour;
 
 use Vietiso\OneGuide\Exception\ValidationException;
+use Vietiso\OneGuide\Service\BookingStatus;
 use Vietiso\OneGuide\Service\Service;
 use Vietiso\OneGuide\Tour\Operator;
 use Vietiso\OneGuide\Guide\Guide;
@@ -387,6 +388,12 @@ class Tour
 
         if ($amount !== null && $amount < 0) {
             throw new ValidationException("Service \"{$title}\": amount must be greater than or equal to 0.");
+        }
+
+        $bookingStatus = $service->getBookingStatus();
+
+        if ($bookingStatus !== null && !in_array($bookingStatus, [BookingStatus::NOT_BOOKED, BookingStatus::BOOKED], true)) {
+            throw new ValidationException("Service \"{$title}\": booking status \"{$bookingStatus}\" is invalid.");
         }
 
         $days = $service->getTourDays();
