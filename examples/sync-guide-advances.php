@@ -26,6 +26,7 @@ $guide->addAdvance(
     (new Advance())
         ->setId(1001)                 // bắt buộc
         ->setCode('ADV001')           // bắt buộc
+        ->setTitle('Tạm ứng ăn trưa') // bắt buộc
         ->setServiceId(222)           // bắt buộc
         ->setAmount(5000000)          // bắt buộc
         ->setCurrency('VND')          // Tùy chọn, mặc định VND

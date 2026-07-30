@@ -18,6 +18,8 @@ class Advance implements Arrayable
 
     private ?string $note = null;
 
+    private ?string $title = null;
+
     public function setId(string $id)
     {
         $this->id = $id;
@@ -38,6 +40,17 @@ class Advance implements Arrayable
     public function getCode(): ?string
     {
         return $this->code;
+    }
+
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
     }
 
     public function setServiceId(string $serviceId)
@@ -92,6 +105,7 @@ class Advance implements Arrayable
             'tour_service_id' => $this->getServiceId(),
             'amount' => $this->getAmount(),
             'currency_code' => $this->getCurrency(),
+            'title' => $this->getTitle(),
             'note' => $this->getNote(),
         ];
     }

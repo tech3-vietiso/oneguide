@@ -499,6 +499,10 @@ class Tour
                     throw new ValidationException("Guide with card number \"{$cardNumber}\": advance expense_code is required.");
                 }
 
+                if (empty($advance->getTitle())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": advance title is required.");
+                }
+
                 if (empty($advance->getServiceId())) {
                     throw new ValidationException("Guide with card number \"{$cardNumber}\": advance tour_service_id is required.");
                 }

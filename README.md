@@ -158,7 +158,7 @@ Xem đầy đủ tại [examples/add-tour-guide.php](examples/add-tour-guide.php
 Các trường **bắt buộc** khi gọi `syncAdvances()`:
 
 - `card_number` của hướng dẫn viên (`new Guide(...)`).
-- Mỗi khoản tạm ứng (`Advance`): `external_expense_id` (`setId`), `expense_code` (`setCode`), `tour_service_id` (`setServiceId`) và `amount` (`setAmount`).
+- Mỗi khoản tạm ứng (`Advance`): `external_expense_id` (`setId`), `expense_code` (`setCode`), `title` (`setTitle`), `tour_service_id` (`setServiceId`) và `amount` (`setAmount`).
 
 ```php
 use Vietiso\OneGuide\Tour\Tour;
@@ -175,6 +175,7 @@ $guide->addAdvance(
     (new Advance())
         ->setId(1001)                 // ID tạm ứng bên hệ thống của bạn (bắt buộc)
         ->setCode('ADV001')           // Mã tạm ứng (bắt buộc)
+        ->setTitle('Tạm ứng ăn trưa') // Tiêu đề tạm ứng (bắt buộc)
         ->setServiceId(222)           // ID dịch vụ trong tour (bắt buộc)
         ->setAmount(5000000)          // số tiền tạm ứng (bắt buộc)
         ->setCurrency('VND')          // Tùy chọn, mặc định là VND
