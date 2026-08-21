@@ -3,6 +3,7 @@
 namespace Vietiso\OneGuide\Service;
 
 use Vietiso\OneGuide\Arrayable;
+use Vietiso\OneGuide\Support;
 
 class Service implements Arrayable
 {
@@ -32,7 +33,7 @@ class Service implements Arrayable
 
     public function setId(string $id): self
     {
-        $this->id = $id;
+        $this->id = Support::trimString($id);
         return $this;
     }
 
@@ -43,7 +44,7 @@ class Service implements Arrayable
 
     public function setTitle(string $title): self
     {
-        $this->title = $title;
+        $this->title = Support::trimString($title);
         return $this;
     }
 
@@ -54,7 +55,7 @@ class Service implements Arrayable
 
     public function setAddress(string $address)
     {
-        $this->address = $address;
+        $this->address = Support::trimString($address);
         return $this;
     }
 
@@ -120,7 +121,7 @@ class Service implements Arrayable
 
     public function setCompanyName(string $companyName)
     {
-        $this->companyName = $companyName;
+        $this->companyName = Support::trimString($companyName);
         return $this;
     }
 
@@ -131,7 +132,7 @@ class Service implements Arrayable
 
     public function setCompanyPhone(string $companyPhone)
     {
-        $this->companyPhone = $companyPhone;
+        $this->companyPhone = Support::trimString($companyPhone);
         return $this;
     }
 
@@ -142,7 +143,7 @@ class Service implements Arrayable
 
     public function setCompanyEmail(string $companyEmail)
     {
-        $this->companyEmail = $companyEmail;
+        $this->companyEmail = Support::trimString($companyEmail);
         return $this;
     }
 
@@ -153,7 +154,7 @@ class Service implements Arrayable
 
     public function setNote(string $note)
     {
-        $this->note = $note;
+        $this->note = Support::trimString($note);
         return $this;
     }
 

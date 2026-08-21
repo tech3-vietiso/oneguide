@@ -3,6 +3,7 @@
 namespace Vietiso\OneGuide\Guide;
 
 use Vietiso\OneGuide\Arrayable;
+use Vietiso\OneGuide\Support;
 
 class Guide implements Arrayable
 {
@@ -18,12 +19,12 @@ class Guide implements Arrayable
 
     public function __construct(string $cardNumber)
     {
-        $this->cardNumber = $cardNumber; 
+        $this->setCardNumber($cardNumber);
     }
 
     public function setCardNumber(string $cardNumber): self
     {
-        $this->cardNumber = $cardNumber;
+        $this->cardNumber = Support::trimString($cardNumber);
         return $this;
     }
 
@@ -34,7 +35,7 @@ class Guide implements Arrayable
 
     public function setPhone(string $phone): self
     {
-        $this->phone = $phone;
+        $this->phone = Support::trimString($phone);
         return $this;
     }
 
@@ -45,7 +46,7 @@ class Guide implements Arrayable
 
     public function setEmail(string $email): self
     {
-        $this->email = $email;
+        $this->email = Support::trimString($email);
         return $this;
     }
 

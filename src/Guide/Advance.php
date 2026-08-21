@@ -3,6 +3,7 @@
 namespace Vietiso\OneGuide\Guide;
 
 use Vietiso\OneGuide\Arrayable;
+use Vietiso\OneGuide\Support;
 
 class Advance implements Arrayable
 {
@@ -22,7 +23,7 @@ class Advance implements Arrayable
 
     public function setId(string $id)
     {
-        $this->id = $id;
+        $this->id = Support::trimString($id);
         return $this;
     }
 
@@ -33,7 +34,7 @@ class Advance implements Arrayable
 
     public function setCode(string $code)
     {
-        $this->code = $code;
+        $this->code = Support::trimString($code);
         return $this;
     }
 
@@ -44,7 +45,7 @@ class Advance implements Arrayable
 
     public function setTitle(string $title)
     {
-        $this->title = $title;
+        $this->title = Support::trimString($title);
         return $this;
     }
 
@@ -77,7 +78,7 @@ class Advance implements Arrayable
 
     public function setCurrency(string $currencyCode)
     {
-        $this->currencyCode = $currencyCode;
+        $this->currencyCode = Support::trimString($currencyCode);
         return $this;
     }
 
@@ -88,7 +89,7 @@ class Advance implements Arrayable
 
     public function setNote(string $note)
     {
-        $this->note = $note;
+        $this->note = Support::trimString($note);
         return $this;
     }
 

@@ -4,6 +4,7 @@ namespace Vietiso\OneGuide\Tour;
 
 use Vietiso\OneGuide\Arrayable;
 use DateTimeInterface;
+use Vietiso\OneGuide\Support;
 
 class Member implements Arrayable
 {
@@ -31,7 +32,7 @@ class Member implements Arrayable
 
     public function setId(string $id): self
     {
-        $this->id = $id;
+        $this->id = Support::trimString($id);
         return $this;
     }
 
@@ -42,7 +43,7 @@ class Member implements Arrayable
 
     public function setFullName(string $fullName): self
     {
-        $this->fullName = $fullName;
+        $this->fullName = Support::trimString($fullName);
         return $this;
     }
 
@@ -75,7 +76,7 @@ class Member implements Arrayable
 
     public function setPhone(string $phone): self
     {
-        $this->phone = $phone;
+        $this->phone = Support::trimString($phone);
         return $this;
     }
 
@@ -86,7 +87,7 @@ class Member implements Arrayable
 
     public function setEmail(string $email): self
     {
-        $this->email = $email;
+        $this->email = Support::trimString($email);
         return $this;
     }
 
@@ -97,7 +98,7 @@ class Member implements Arrayable
 
     public function setPassportNumber(string $passportNumber): self
     {
-        $this->passportNumber = $passportNumber;
+        $this->passportNumber = Support::trimString($passportNumber);
         return $this;
     }
 
@@ -122,7 +123,7 @@ class Member implements Arrayable
      */
     public function setIdentityCardNumber(string $identityCardNumber): self
     {
-        $this->identityCardNumber = $identityCardNumber;
+        $this->identityCardNumber = Support::trimString($identityCardNumber);
         return $this;
     }
 
@@ -133,7 +134,7 @@ class Member implements Arrayable
 
     public function setCountryId(string $countryId): self
     {
-        $this->countryId = $countryId;
+        $this->countryId = Support::trimString($countryId);
         return $this;
     }
 
@@ -144,7 +145,7 @@ class Member implements Arrayable
 
     public function setNote(string $note): self
     {
-        $this->note = $note;
+        $this->note = Support::trimString($note);
         return $this;
     }
 

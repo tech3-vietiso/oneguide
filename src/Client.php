@@ -14,9 +14,9 @@ class Client
 
     public function __construct(array $params = [])
     {
-        $this->apiKey = $params['api_key'];
-        $this->secret = $params['secret'];
-        $this->url = $params['url'];
+        $this->apiKey = Support::trimString($params['api_key']);
+        $this->secret = Support::trimString($params['secret']);
+        $this->url = Support::trimString($params['url']);
     }
 
     public function send(string $endpoint, array $data)

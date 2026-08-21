@@ -4,6 +4,7 @@ namespace Vietiso\OneGuide\Tour;
 
 use Vietiso\OneGuide\Guide\Guide;
 use Vietiso\OneGuide\Arrayable;
+use Vietiso\OneGuide\Support;
 
 class Itinerary implements Arrayable
 {
@@ -21,7 +22,7 @@ class Itinerary implements Arrayable
 
     public function setTitle(string $title): self
     {
-        $this->title = $title;
+        $this->title = Support::trimString($title);
         return $this;
     }
 
@@ -43,7 +44,7 @@ class Itinerary implements Arrayable
 
     public function setContent(string $content): self
     {
-        $this->content = $content;
+        $this->content = Support::trimString($content);
         return $this;
     }
 
@@ -54,7 +55,7 @@ class Itinerary implements Arrayable
 
     public function setImage(string $image): self
     {
-        $this->image = $image;
+        $this->image = Support::trimString($image);
         return $this;
     }
 
@@ -76,7 +77,7 @@ class Itinerary implements Arrayable
 
     public function setProvince(string $provinceCode): self
     {
-        $this->provinces[] = $provinceCode;
+        $this->provinces[] = Support::trimString($provinceCode);
         return $this;
     }
 

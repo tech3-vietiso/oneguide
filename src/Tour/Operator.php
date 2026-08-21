@@ -2,6 +2,8 @@
 
 namespace Vietiso\OneGuide\Tour;
 
+use Vietiso\OneGuide\Support;
+
 class Operator
 {
     private ?string $name = null;
@@ -14,7 +16,7 @@ class Operator
 
     public function setName(string $name): self
     {
-        $this->name = $name;
+        $this->name = Support::trimString($name);
         return $this;
     }
     public function getName(): ?string
@@ -24,7 +26,7 @@ class Operator
 
     public function setPhone(string $phone): self
     {
-        $this->phone = $phone;
+        $this->phone = Support::trimString($phone);
         return $this;
     }
 
@@ -35,7 +37,7 @@ class Operator
 
     public function setEmail(string $email): self
     {
-        $this->email = $email;
+        $this->email = Support::trimString($email);
         return $this;
     }
 
@@ -46,7 +48,7 @@ class Operator
 
     public function setAvatar(string $avatar): self
     {
-        $this->avatar = $avatar;
+        $this->avatar = Support::trimString($avatar);
         return $this;
     }
 

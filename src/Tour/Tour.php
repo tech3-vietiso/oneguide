@@ -9,6 +9,7 @@ use Vietiso\OneGuide\Tour\Operator;
 use Vietiso\OneGuide\Guide\Guide;
 use Vietiso\OneGuide\Client;
 use DateTimeInterface;
+use Vietiso\OneGuide\Support;
 
 class Tour
 {
@@ -51,7 +52,7 @@ class Tour
 
     public function setId(string $id): self
     {
-        $this->id = $id;
+        $this->id = Support::trimString($id);
         return $this;
     }
 
@@ -62,7 +63,7 @@ class Tour
 
     public function setTitle(string $title): self
     {
-        $this->title = $title;
+        $this->title = Support::trimString($title);
         return $this;
     }
 
@@ -73,7 +74,7 @@ class Tour
 
     public function setImage(string $image): self
     {
-        $this->image = $image;
+        $this->image = Support::trimString($image);
         return $this;
     }
 
@@ -84,7 +85,7 @@ class Tour
 
     public function setCode(string $code): self
     {
-        $this->code = $code;
+        $this->code = Support::trimString($code);
         return $this;
     }
 
