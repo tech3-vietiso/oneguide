@@ -445,7 +445,7 @@ class Tour
 
     private function assertImageUrl(?string $image, string $label): void
     {
-        if (!empty($image) && !filter_var($image, FILTER_VALIDATE_URL)) {
+        if (!empty($image) && !Support::isUrl($image)) {
             throw new ValidationException("{$label}: image \"{$image}\" must be a valid URL.");
         }
     }
