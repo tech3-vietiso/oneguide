@@ -7,13 +7,13 @@ use Vietiso\OneGuide\Tour\Tour;
 require '../vendor/autoload.php';
 
 /*
- * Ví dụ: Gán (đồng bộ) danh sách hướng dẫn viên cho một tour đã tồn tại.
+ * Ví dụ: Mời danh sách hướng dẫn viên vào một tour đã tồn tại.
  *
  * Luồng xử lý:
  *   1. Khởi tạo Client với thông tin xác thực.
- *   2. Tạo đối tượng Tour và trỏ tới tour cần gán bằng ID.
+ *   2. Tạo đối tượng Tour và trỏ tới tour cần mời bằng ID.
  *   3. Thêm từng hướng dẫn viên (Guide) kèm những ngày họ phụ trách.
- *   4. Gọi syncGuides() để đẩy dữ liệu lên OneGuide.
+ *   4. Gọi inviteGuides() để đẩy dữ liệu lên OneGuide.
  */
 
 // Bước 1: Khởi tạo Client.
@@ -25,9 +25,9 @@ $client = new Client([
     'url' => 'https://xxxxxxxxxxxxx'
 ]);
 
-// Danh sách hướng dẫn viên cần gán cho tour.
+// Danh sách hướng dẫn viên cần mời vào tour.
 // - card_number: số thẻ hướng dẫn viên (bắt buộc, dùng để định danh).
-// - phone / email: thông tin liên hệ (email là bắt buộc khi đồng bộ).
+// - phone / email: thông tin liên hệ (email là bắt buộc khi mời).
 $guides = [
     [
         'card_number' => 148235149,
@@ -41,7 +41,7 @@ $guides = [
     ]
 ];
 
-// Bước 2: Tạo đối tượng Tour và chỉ định ID của tour cần gán hướng dẫn viên.
+// Bước 2: Tạo đối tượng Tour và chỉ định ID của tour cần mời hướng dẫn viên.
 $tour = new Tour($client);
 $tour->setId(111);
 
@@ -66,6 +66,6 @@ foreach ($guides as $item) {
     ]);
 }
 
-// Bước 4: Đẩy toàn bộ hướng dẫn viên đã thêm lên OneGuide.
+// Bước 4: Gửi lời mời cho toàn bộ hướng dẫn viên đã thêm lên OneGuide.
 // Trước khi gửi, SDK sẽ tự validate (ví dụ: email bắt buộc và hợp lệ).
-$tour->syncGuides();
+$tour->inviteGuides();

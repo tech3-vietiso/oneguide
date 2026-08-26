@@ -1,6 +1,6 @@
 # OneGuide SDK
 
-SDK PHP giúp tích hợp với hệ thống **OneGuide**: đồng bộ tour điều hành, gán hướng dẫn viên cho tour và truy vấn danh mục (tỉnh/thành...).
+SDK PHP giúp tích hợp với hệ thống **OneGuide**: đồng bộ tour điều hành, mời hướng dẫn viên vào tour và truy vấn danh mục (tỉnh/thành...).
 
 ## Yêu cầu
 
@@ -128,16 +128,16 @@ Dịch vụ và thành viên đều được gửi kèm trong chính payload c�
 
 Xem đầy đủ tại [examples/sync-tour.php](examples/sync-tour.php).
 
-### 2. Gán hướng dẫn viên cho tour
+### 2. Mời hướng dẫn viên vào tour
 
-Gán (đồng bộ) danh sách hướng dẫn viên cho một tour đã tồn tại, kèm những ngày mỗi người phụ trách.
+Mời danh sách hướng dẫn viên vào một tour đã tồn tại, kèm những ngày mỗi người phụ trách.
 
 ```php
 use Vietiso\OneGuide\Tour\Tour;
 use Vietiso\OneGuide\Guide\Guide;
 
 $tour = new Tour($client);
-$tour->setId(111); // ID tour cần gán
+$tour->setId(111); // ID tour cần mời
 
 $guide = new Guide('148235149'); // card_number: số thẻ hướng dẫn viên
 $guide->setEmail('guide@example.com'); // Email bắt buộc & phải hợp lệ
@@ -146,10 +146,10 @@ $guide->setPhone('0327145495');
 // Tham số thứ hai là các ngày trong tour mà hướng dẫn viên phụ trách
 $tour->addGuide($guide, [1, 2, 3, 4]);
 
-$tour->syncGuides();
+$tour->inviteGuides();
 ```
 
-Xem đầy đủ tại [examples/add-tour-guide.php](examples/add-tour-guide.php).
+Xem đầy đủ tại [examples/invite-tour-guides.php](examples/invite-tour-guides.php).
 
 ### 3. Đồng bộ tạm ứng cho hướng dẫn viên
 
@@ -275,6 +275,6 @@ try {
 Thư mục [examples/](examples/) chứa các ví dụ chạy được kèm chú thích chi tiết:
 
 - [sync-tour.php](examples/sync-tour.php) — đẩy tour điều hành đầy đủ (kèm thành viên trong đoàn).
-- [add-tour-guide.php](examples/add-tour-guide.php) — gán hướng dẫn viên cho tour.
+- [invite-tour-guides.php](examples/invite-tour-guides.php) — mời hướng dẫn viên vào tour.
 - [sync-guide-advances.php](examples/sync-guide-advances.php) — đồng bộ tạm ứng cho hướng dẫn viên.
 - [get-province.php](examples/get-province.php) — lấy danh sách tỉnh/thành có phân trang.

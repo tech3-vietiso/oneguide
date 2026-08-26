@@ -1,6 +1,6 @@
 {
     "name": "vietiso/oneguide",
-    "description": "SDK PHP tích hợp với hệ thống OneGuide: đồng bộ tour điều hành, gán hướng dẫn viên, truy vấn danh mục.",
+    "description": "SDK PHP tích hợp với hệ thống OneGuide: đồng bộ tour điều hành, mời hướng dẫn viên, truy vấn danh mục.",
     "license": "MIT",
     "autoload": {
         "psr-4": {

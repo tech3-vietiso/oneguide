@@ -240,7 +240,7 @@ class Tour
             });
         }, $this->getMembers());
 
-        $tour = [
+        $this->client->send('integration-tours', [
             'external_tour_id' => $this->getId(),
             'name' => $this->getTitle(),
             'tour_code' => $this->getCode(),
@@ -255,19 +255,18 @@ class Tour
             'operators' => $operators,
             'services' => $services,
             'guests' => $members
-        ];
-        $this->client->send('integration-tours', $tour);
+        ]);
     }
 
-    public function syncGuides()
+    public function inviteGuides()
     {
         $guides = array_map(static function ($guide) {
             return $guide->toArray();
         }, $this->getGuides());
 
-        $this->validateSyncGuide($guides);
+        $this->validateInviteGuide($guides);
 
-        $this->client->send("integration-tours/{$this->getId()}/sync-guides", [
+        $this->client->send("integration-tours/{$this->getId()}/invite-guides", [
             'guides' => $guides
         ]);
     }
@@ -457,7 +456,7 @@ class Tour
         }
     }
 
-    private function validateSyncGuide(array $guides): void
+    private function validateInviteGuide(array $guides): void
     {
         foreach ($guides as $guide) {
             $cardNumber = $guide['card_number'] ?? null;
