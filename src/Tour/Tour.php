@@ -3,6 +3,7 @@
 namespace Vietiso\OneGuide\Tour;
 
 use Vietiso\OneGuide\Exception\ValidationException;
+use Vietiso\OneGuide\Paginator\Collection;
 use Vietiso\OneGuide\Service\BookingStatus;
 use Vietiso\OneGuide\Service\Service;
 use Vietiso\OneGuide\Tour\Operator;
@@ -290,6 +291,22 @@ class Tour
         $this->client->send("integration-tours/{$this->getId()}/sync-expenses", [
             'guides' => $guides
         ]);
+    }
+
+    public function listFeedbacks(int $limit = 10, ?string $nextCursor = null): Collection
+    {
+        if (empty($this->id)) {
+            throw new ValidationException('Tour: id is required.');
+        }
+
+        $endpoint = "integration-tours/{$this->getId()}/feedbacks";
+        $params = [
+            'limit' => $limit,
+            'cursor' => $nextCursor
+        ];
+        $response = $this->client->send($endpoint, $params);
+
+        return new Collection($this->client, $response, $endpoint, $params);
     }
 
     private function validateSyncTour(): void

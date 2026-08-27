@@ -2,6 +2,14 @@
 
 Các thay đổi đáng chú ý của SDK sẽ được ghi lại trong file này.
 
+## V0.2.1
+
+### Tính năng mới
+
+Thêm `Tour::listFeedbacks($limit, $nextCursor)` — lấy danh sách feedback (ảnh/video) của một tour, phân trang theo con trỏ và trả về `Collection` giống `Province::list()`.
+
+Không có breaking change so với V0.2.0.
+
 ## V0.2.0
 
 ### Breaking change

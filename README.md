@@ -216,6 +216,34 @@ while ($page->hasMore()) {
 
 Xem đầy đủ tại [examples/get-province.php](examples/get-province.php).
 
+### 5. Lấy danh sách feedback của tour
+
+Lấy các feedback (ảnh/video) mà hướng dẫn viên gửi về cho một tour. Kết quả phân trang theo con trỏ giống mục 4, trả về `Collection`.
+
+```php
+use Vietiso\OneGuide\Tour\Tour;
+
+$tour = new Tour($client);
+$tour->setId(111); // ID tour cần lấy feedback
+
+// Cách 1 (khuyến nghị): foreach tự lấy hết các trang
+foreach ($tour->listFeedbacks() as $feedback) {
+    // mỗi $feedback là mảng dữ liệu thô do API trả về (ảnh hoặc video)
+}
+
+// Cách 2: lặp thủ công bằng con trỏ
+$page = $tour->listFeedbacks(20);
+$feedbacks = $page->getItems();
+while ($page->hasMore()) {
+    $page = $tour->listFeedbacks(20, $page->getNextCursor());
+    $feedbacks = array_merge($feedbacks, $page->getItems());
+}
+```
+
+Cần `setId()` trước khi gọi, nếu không sẽ ném `ValidationException`.
+
+Xem đầy đủ tại [examples/get-tour-feedbacks.php](examples/get-tour-feedbacks.php).
+
 ## Xử lý lỗi
 
 SDK ném hai loại ngoại lệ, đều kế thừa từ `OneGuideException`:
@@ -277,4 +305,5 @@ Thư mục [examples/](examples/) chứa các ví dụ chạy được kèm chú
 - [sync-tour.php](examples/sync-tour.php) — đẩy tour điều hành đầy đủ (kèm thành viên trong đoàn).
 - [invite-tour-guides.php](examples/invite-tour-guides.php) — mời hướng dẫn viên vào tour.
 - [sync-guide-advances.php](examples/sync-guide-advances.php) — đồng bộ tạm ứng cho hướng dẫn viên.
+- [get-tour-feedbacks.php](examples/get-tour-feedbacks.php) — lấy danh sách feedback (ảnh/video) của tour.
 - [get-province.php](examples/get-province.php) — lấy danh sách tỉnh/thành có phân trang.
