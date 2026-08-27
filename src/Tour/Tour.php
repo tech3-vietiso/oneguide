@@ -293,6 +293,23 @@ class Tour
         ]);
     }
 
+    /**
+     * Tình trạng xác nhận của từng hướng dẫn viên đã được mời vào tour.
+     * Không phân trang vì một tour chỉ có vài hướng dẫn viên.
+     *
+     * @return array[] Mỗi phần tử là mảng thô của một lời mời, `status` xem InvitationStatus.
+     */
+    public function listGuideInvitations(): array
+    {
+        if (empty($this->id)) {
+            throw new ValidationException('Tour: id is required.');
+        }
+
+        $response = $this->client->send("integration-tours/{$this->getId()}/guide-invitations", []);
+
+        return $response['data'] ?? [];
+    }
+
     public function listFeedbacks(int $limit = 10, ?string $nextCursor = null): Collection
     {
         if (empty($this->id)) {

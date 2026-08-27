@@ -244,6 +244,29 @@ Cần `setId()` trước khi gọi, nếu không sẽ ném `ValidationException`
 
 Xem đầy đủ tại [examples/get-tour-feedbacks.php](examples/get-tour-feedbacks.php).
 
+### 6. Xem tình trạng xác nhận của hướng dẫn viên
+
+Sau khi mời (mục 2), hướng dẫn viên tự nhận hoặc từ chối tour. Hàm này cho biết ai đã phản hồi, ai còn đang chờ. Kết quả **không phân trang** vì một tour chỉ có vài hướng dẫn viên.
+
+```php
+use Vietiso\OneGuide\Tour\Tour;
+use Vietiso\OneGuide\Guide\InvitationStatus;
+
+$tour = new Tour($client);
+$tour->setId(111); // ID tour cần xem
+
+foreach ($tour->listGuideInvitations() as $invitation) {
+    // mỗi $invitation là mảng dữ liệu thô do API trả về
+    if ($invitation['status'] === InvitationStatus::DECLINED) {
+        echo $invitation['card_number'] . ' từ chối: ' . $invitation['decline_reason'];
+    }
+}
+```
+
+Cần `setId()` trước khi gọi, nếu không sẽ ném `ValidationException`.
+
+Xem đầy đủ tại [examples/get-tour-guide-invitations.php](examples/get-tour-guide-invitations.php).
+
 ## Xử lý lỗi
 
 SDK ném hai loại ngoại lệ, đều kế thừa từ `OneGuideException`:
@@ -298,6 +321,12 @@ try {
 | `NOT_BOOKED` (chưa đặt) | 0 |
 | `BOOKED` (đã đặt) | 1 |
 
+| Tình trạng lời mời hướng dẫn viên (`InvitationStatus`) | Giá trị |
+| --- | --- |
+| `PENDING` (chưa phản hồi) | 1 |
+| `ACCEPTED` (đã nhận tour) | 2 |
+| `DECLINED` (đã từ chối) | 3 |
+
 ## Ví dụ
 
 Thư mục [examples/](examples/) chứa các ví dụ chạy được kèm chú thích chi tiết:
@@ -306,4 +335,5 @@ Thư mục [examples/](examples/) chứa các ví dụ chạy được kèm chú
 - [invite-tour-guides.php](examples/invite-tour-guides.php) — mời hướng dẫn viên vào tour.
 - [sync-guide-advances.php](examples/sync-guide-advances.php) — đồng bộ tạm ứng cho hướng dẫn viên.
 - [get-tour-feedbacks.php](examples/get-tour-feedbacks.php) — lấy danh sách feedback (ảnh/video) của tour.
+- [get-tour-guide-invitations.php](examples/get-tour-guide-invitations.php) — xem tình trạng xác nhận của hướng dẫn viên.
 - [get-province.php](examples/get-province.php) — lấy danh sách tỉnh/thành có phân trang.

@@ -2,6 +2,14 @@
 
 Các thay đổi đáng chú ý của SDK sẽ được ghi lại trong file này.
 
+## V0.2.2
+
+### Tính năng mới
+
+Thêm `Tour::listGuideInvitations()` — xem tình trạng xác nhận (chưa phản hồi / đã nhận / đã từ chối) của các hướng dẫn viên đã được mời vào tour. Kèm hằng số `Guide\InvitationStatus`.
+
+Không phân trang vì một tour chỉ có vài hướng dẫn viên. Không có breaking change so với V0.2.1.
+
 ## V0.2.1
 
 ### Tính năng mới
