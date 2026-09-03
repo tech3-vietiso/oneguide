@@ -336,16 +336,44 @@ class Tour
     }
 
     /**
-     * Xoá các phiếu đã đồng bộ trước đó (tạm ứng / chi bổ sung / hoàn tạm ứng).
+     * Xoá các khoản tạm ứng đã đồng bộ trước đó.
      * Hướng dẫn viên sẽ nhận email báo phiếu đã bị huỷ.
      *
-     * @param array $expenseIds Các `external_expense_id` — chính là giá trị đã gửi ở setId().
+     * @param array $expenseIds Các `external_expense_id` — chính là giá trị đã gửi ở Advance::setId().
      */
-    public function deleteExpenses(array $expenseIds)
+    public function deleteAdvances(array $expenseIds)
+    {
+        $this->sendDeleteExpenses('delete-expenses', $expenseIds);
+    }
+
+    /**
+     * Xoá các khoản chi bổ sung đã đồng bộ trước đó.
+     *
+     * @param array $expenseIds Các `external_expense_id` đã gửi ở AdditionalExpense::setId().
+     */
+    public function deleteAdditionalExpenses(array $expenseIds)
+    {
+        $this->sendDeleteExpenses('delete-additional-expenses', $expenseIds);
+    }
+
+    /**
+     * Xoá các khoản hoàn tạm ứng đã đồng bộ trước đó.
+     *
+     * @param array $expenseIds Các `external_expense_id` đã gửi ở Refund::setId().
+     */
+    public function deleteRefunds(array $expenseIds)
+    {
+        $this->sendDeleteExpenses('delete-advance-refunds', $expenseIds);
+    }
+
+    /**
+     * Ba loại phiếu chỉ khác endpoint, payload đều là danh sách external_expense_id.
+     */
+    private function sendDeleteExpenses(string $action, array $expenseIds)
     {
         $this->validateDeleteExpenses($expenseIds);
 
-        $this->client->send("integration-tours/{$this->getId()}/delete-expenses", [
+        $this->client->send("integration-tours/{$this->getId()}/{$action}", [
             'expenses' => array_values($expenseIds)
         ]);
     }

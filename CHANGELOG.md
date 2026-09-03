@@ -6,16 +6,25 @@ Các thay đổi đáng chú ý của SDK sẽ được ghi lại trong file nà
 
 ### Tính năng mới
 
-Thêm `Tour::deleteExpenses(array $expenseIds)` — xoá các phiếu đã đồng bộ (tạm ứng, chi bổ sung, hoàn tạm ứng) theo `external_expense_id`.
+Thêm ba hàm xoá phiếu đã đồng bộ, tách theo loại phiếu giống các hàm đồng bộ:
+
+| Loại phiếu | Hàm | Endpoint |
+| --- | --- | --- |
+| Tạm ứng | `Tour::deleteAdvances()` | `POST integration-tours/{id}/delete-expenses` |
+| Chi bổ sung | `Tour::deleteAdditionalExpenses()` | `POST integration-tours/{id}/delete-additional-expenses` |
+| Hoàn tạm ứng | `Tour::deleteRefunds()` | `POST integration-tours/{id}/delete-advance-refunds` |
 
 ```php
 $tour = new Tour($client);
 $tour->setId(111);
 
-$tour->deleteExpenses([1001, 2001]);
+$tour->deleteAdvances([1001, 1002]);
+$tour->deleteAdditionalExpenses([2001]);
+$tour->deleteRefunds([3001]);
 ```
 
-- Endpoint: `POST integration-tours/{id}/delete-expenses`, payload `{"expenses": [1001, 2001]}`.
+- Tham số là danh sách `external_expense_id`, payload gửi lên `{"expenses": [1001, 1002]}`.
+- Mỗi hàm chỉ xoá đúng loại phiếu của nó.
 - Ném `ValidationException` nếu thiếu id tour hoặc danh sách rỗng.
 - Phía OneGuide xoá mềm phiếu, đồng thời **gửi email báo hướng dẫn viên phiếu đã bị huỷ**. Khoản chi do chính hướng dẫn viên nhập cho nhà cung cấp không bị ảnh hưởng.
 

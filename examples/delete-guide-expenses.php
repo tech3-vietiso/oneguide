@@ -17,7 +17,15 @@ $client = new Client([
 $tour = new Tour($client);
 $tour->setId(111);
 
-// Danh sách external_expense_id cần xoá — chính là giá trị đã gửi ở setId() lúc
-// đồng bộ tạm ứng / chi bổ sung / hoàn tạm ứng.
+// Mỗi loại phiếu có hàm xoá riêng; tham số là các external_expense_id — chính là
+// giá trị đã gửi ở setId() lúc đồng bộ.
 // Hướng dẫn viên sẽ nhận email báo các phiếu này đã bị huỷ.
-$tour->deleteExpenses([1001, 2001]);
+
+// Xoá tạm ứng
+$tour->deleteAdvances([1001, 1002]);
+
+// Xoá chi bổ sung
+$tour->deleteAdditionalExpenses([2001]);
+
+// Xoá hoàn tạm ứng
+$tour->deleteRefunds([3001]);

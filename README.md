@@ -257,7 +257,13 @@ Xem đầy đủ tại [examples/sync-guide-refunds.php](examples/sync-guide-ref
 
 ### 6. Xoá phiếu đã đồng bộ
 
-Xoá các phiếu đã đẩy sang OneGuide ở mục 3–5 (tạm ứng, chi bổ sung, hoàn tạm ứng). Chỉ định bằng `external_expense_id` — chính giá trị đã gửi ở `setId()`.
+Xoá các phiếu đã đẩy sang OneGuide ở mục 3–5. Mỗi loại phiếu một hàm riêng, tham số là danh sách `external_expense_id` — chính giá trị đã gửi ở `setId()`.
+
+| Loại phiếu | Hàm | Endpoint |
+| --- | --- | --- |
+| Tạm ứng | `deleteAdvances()` | `POST integration-tours/{id}/delete-expenses` |
+| Chi bổ sung | `deleteAdditionalExpenses()` | `POST integration-tours/{id}/delete-additional-expenses` |
+| Hoàn tạm ứng | `deleteRefunds()` | `POST integration-tours/{id}/delete-advance-refunds` |
 
 ```php
 use Vietiso\OneGuide\Tour\Tour;
@@ -265,8 +271,12 @@ use Vietiso\OneGuide\Tour\Tour;
 $tour = new Tour($client);
 $tour->setId(111);
 
-$tour->deleteExpenses([1001, 2001]); // Ném ValidationException nếu thiếu id tour hoặc danh sách rỗng
+$tour->deleteAdvances([1001, 1002]);      // Ném ValidationException nếu thiếu id tour hoặc danh sách rỗng
+$tour->deleteAdditionalExpenses([2001]);
+$tour->deleteRefunds([3001]);
 ```
+
+Mỗi hàm chỉ xoá đúng loại phiếu của nó, nên gửi nhầm id sang hàm khác thì không có gì bị xoá.
 
 Phiếu bị xoá sẽ biến mất khỏi màn hình của hướng dẫn viên và **hướng dẫn viên nhận email báo phiếu đã bị huỷ**. Khoản chi do chính hướng dẫn viên nhập cho nhà cung cấp không bị ảnh hưởng.
 
