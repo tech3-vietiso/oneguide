@@ -189,7 +189,73 @@ $tour->syncAdvances(); // Ném ValidationException nếu thiếu trường bắt
 
 Xem đầy đủ tại [examples/sync-guide-advances.php](examples/sync-guide-advances.php).
 
-### 4. Lấy danh mục có phân trang (tỉnh/thành)
+### 4. Đồng bộ chi bổ sung cho hướng dẫn viên
+
+Đồng bộ các khoản **chi bổ sung** — chi phí phát sinh thêm trong tour, ngoài những gì đã tạm ứng. Cách dùng giống mục 3, chỉ khác lớp `AdditionalExpense` và hàm `syncAdditionalExpenses()`.
+
+Các trường **bắt buộc**: `card_number` của hướng dẫn viên, và với mỗi khoản chi: `external_expense_id` (`setId`), `expense_code` (`setCode`), `title` (`setTitle`), `amount` (`setAmount`). Khác với tạm ứng, chi bổ sung không gắn với dịch vụ nào nên không có `tour_service_id`.
+
+```php
+use Vietiso\OneGuide\Tour\Tour;
+use Vietiso\OneGuide\Guide\Guide;
+use Vietiso\OneGuide\Guide\AdditionalExpense;
+
+$tour = new Tour($client);
+$tour->setId(111); // ID tour cần đồng bộ
+
+$guide = new Guide('101153183'); // card_number: số thẻ hướng dẫn viên (bắt buộc)
+
+$guide->addAdditionalExpense(
+    (new AdditionalExpense())
+        ->setId(2001)                        // ID khoản chi bên hệ thống của bạn (bắt buộc)
+        ->setCode('EXP001')                  // Mã khoản chi (bắt buộc)
+        ->setTitle('Vé tham quan phát sinh') // Tiêu đề (bắt buộc)
+        ->setAmount(1200000)                 // Số tiền (bắt buộc)
+        ->setCurrency('VND')                 // Tùy chọn, mặc định là VND
+        ->setNote('Khách yêu cầu thêm điểm tham quan') // Tùy chọn
+);
+
+$tour->addGuide($guide);
+
+$tour->syncAdditionalExpenses(); // Ném ValidationException nếu thiếu trường bắt buộc
+```
+
+Xem đầy đủ tại [examples/sync-guide-additional-expenses.php](examples/sync-guide-additional-expenses.php).
+
+### 5. Đồng bộ hoàn tạm ứng của hướng dẫn viên
+
+Đồng bộ các khoản **hoàn tạm ứng** — số tiền hướng dẫn viên trả lại sau khi quyết toán tour (phần tạm ứng chưa dùng hết).
+
+Các trường **bắt buộc**: `card_number` của hướng dẫn viên, và với mỗi khoản hoàn: `external_expense_id` (`setId`), `expense_code` (`setCode`), `title` (`setTitle`), `amount` (`setAmount`). Khoản hoàn không gắn với dịch vụ nào nên không có `tour_service_id`.
+
+```php
+use Vietiso\OneGuide\Tour\Tour;
+use Vietiso\OneGuide\Guide\Guide;
+use Vietiso\OneGuide\Guide\Refund;
+
+$tour = new Tour($client);
+$tour->setId(111); // ID tour cần đồng bộ
+
+$guide = new Guide('101153183'); // card_number: số thẻ hướng dẫn viên (bắt buộc)
+
+$guide->addRefund(
+    (new Refund())
+        ->setId(3001)                      // ID khoản hoàn bên hệ thống của bạn (bắt buộc)
+        ->setCode('REF001')                // Mã khoản hoàn (bắt buộc)
+        ->setTitle('Hoàn tạm ứng ăn trưa') // Tiêu đề (bắt buộc)
+        ->setAmount(500000)                // Số tiền hoàn lại (bắt buộc)
+        ->setCurrency('VND')               // Tùy chọn, mặc định là VND
+        ->setNote('Hoàn phần chưa dùng hết') // Tùy chọn
+);
+
+$tour->addGuide($guide);
+
+$tour->syncRefunds(); // Ném ValidationException nếu thiếu trường bắt buộc
+```
+
+Xem đầy đủ tại [examples/sync-guide-refunds.php](examples/sync-guide-refunds.php).
+
+### 6. Lấy danh mục có phân trang (tỉnh/thành)
 
 API trả về dữ liệu theo con trỏ (cursor). `list()` trả về một `Collection`; có thể duyệt trực tiếp bằng `foreach` (tự động lấy trang tiếp theo) hoặc lặp thủ công.
 
@@ -216,9 +282,9 @@ while ($page->hasMore()) {
 
 Xem đầy đủ tại [examples/get-province.php](examples/get-province.php).
 
-### 5. Lấy danh sách feedback của tour
+### 7. Lấy danh sách feedback của tour
 
-Lấy các feedback (ảnh/video) mà hướng dẫn viên gửi về cho một tour. Kết quả phân trang theo con trỏ giống mục 4, trả về `Collection`.
+Lấy các feedback (ảnh/video) mà hướng dẫn viên gửi về cho một tour. Kết quả phân trang theo con trỏ giống mục 6, trả về `Collection`.
 
 ```php
 use Vietiso\OneGuide\Tour\Tour;
@@ -244,7 +310,7 @@ Cần `setId()` trước khi gọi, nếu không sẽ ném `ValidationException`
 
 Xem đầy đủ tại [examples/get-tour-feedbacks.php](examples/get-tour-feedbacks.php).
 
-### 6. Xem tình trạng xác nhận của hướng dẫn viên
+### 8. Xem tình trạng xác nhận của hướng dẫn viên
 
 Sau khi mời (mục 2), hướng dẫn viên tự nhận hoặc từ chối tour. Hàm này cho biết ai đã phản hồi, ai còn đang chờ. Kết quả **không phân trang** vì một tour chỉ có vài hướng dẫn viên.
 
@@ -334,6 +400,8 @@ Thư mục [examples/](examples/) chứa các ví dụ chạy được kèm chú
 - [sync-tour.php](examples/sync-tour.php) — đẩy tour điều hành đầy đủ (kèm thành viên trong đoàn).
 - [invite-tour-guides.php](examples/invite-tour-guides.php) — mời hướng dẫn viên vào tour.
 - [sync-guide-advances.php](examples/sync-guide-advances.php) — đồng bộ tạm ứng cho hướng dẫn viên.
+- [sync-guide-additional-expenses.php](examples/sync-guide-additional-expenses.php) — đồng bộ chi bổ sung của hướng dẫn viên.
+- [sync-guide-refunds.php](examples/sync-guide-refunds.php) — đồng bộ hoàn tạm ứng của hướng dẫn viên.
 - [get-tour-feedbacks.php](examples/get-tour-feedbacks.php) — lấy danh sách feedback (ảnh/video) của tour.
 - [get-tour-guide-invitations.php](examples/get-tour-guide-invitations.php) — xem tình trạng xác nhận của hướng dẫn viên.
 - [get-province.php](examples/get-province.php) — lấy danh sách tỉnh/thành có phân trang.

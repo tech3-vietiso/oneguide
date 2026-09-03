@@ -17,6 +17,10 @@ class Guide implements Arrayable
 
     private ?array $advances = null;
 
+    private ?array $additionalExpenses = null;
+
+    private ?array $refunds = null;
+
     public function __construct(string $cardNumber)
     {
         $this->setCardNumber($cardNumber);
@@ -75,6 +79,28 @@ class Guide implements Arrayable
     public function getAdvances(): ?array
     {
         return $this->advances;
+    }
+
+    public function addAdditionalExpense(AdditionalExpense $additionalExpense)
+    {
+        $this->additionalExpenses[] = $additionalExpense;
+        return $this;
+    }
+
+    public function getAdditionalExpenses(): ?array
+    {
+        return $this->additionalExpenses;
+    }
+
+    public function addRefund(Refund $refund)
+    {
+        $this->refunds[] = $refund;
+        return $this;
+    }
+
+    public function getRefunds(): ?array
+    {
+        return $this->refunds;
     }
 
     public function toArray(): array

@@ -294,6 +294,48 @@ class Tour
     }
 
     /**
+     * Đồng bộ các khoản chi bổ sung (chi phí phát sinh ngoài tạm ứng) của hướng dẫn viên.
+     */
+    public function syncAdditionalExpenses()
+    {
+        $this->validateSyncAdditionalExpenses();
+
+        $guides = array_map(static function ($guide) {
+            return [
+                'card_number' => $guide->getCardNumber(),
+                'expenses' => array_map(static function ($additionalExpense) {
+                    return $additionalExpense->toArray();
+                }, $guide->getAdditionalExpenses()),
+            ];
+        }, $this->getGuides());
+
+        $this->client->send("integration-tours/{$this->getId()}/sync-additional-expenses", [
+            'guides' => $guides
+        ]);
+    }
+
+    /**
+     * Đồng bộ các khoản hoàn tạm ứng mà hướng dẫn viên trả lại sau khi quyết toán tour.
+     */
+    public function syncRefunds()
+    {
+        $this->validateSyncRefunds();
+
+        $guides = array_map(static function ($guide) {
+            return [
+                'card_number' => $guide->getCardNumber(),
+                'expenses' => array_map(static function ($refund) {
+                    return $refund->toArray();
+                }, $guide->getRefunds()),
+            ];
+        }, $this->getGuides());
+
+        $this->client->send("integration-tours/{$this->getId()}/sync-advance-refunds", [
+            'guides' => $guides
+        ]);
+    }
+
+    /**
      * Tình trạng xác nhận của từng hướng dẫn viên đã được mời vào tour.
      * Không phân trang vì một tour chỉ có vài hướng dẫn viên.
      *
@@ -543,6 +585,84 @@ class Tour
 
                 if (empty($advance->getAmount())) {
                     throw new ValidationException("Guide with card number \"{$cardNumber}\": advance amount is required.");
+                }
+            }
+        }
+    }
+
+    private function validateSyncAdditionalExpenses(): void
+    {
+        if (empty($this->id)) {
+            throw new ValidationException('Tour: id is required.');
+        }
+
+        foreach ($this->getGuides() as $guide) {
+            $cardNumber = $guide->getCardNumber();
+
+            if (empty($cardNumber)) {
+                throw new ValidationException('Guide: card number is required.');
+            }
+
+            $additionalExpenses = $guide->getAdditionalExpenses();
+
+            if (empty($additionalExpenses)) {
+                throw new ValidationException("Guide with card number \"{$cardNumber}\": at least one additional expense is required.");
+            }
+
+            foreach ($additionalExpenses as $additionalExpense) {
+                if (empty($additionalExpense->getId())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": additional expense external_expense_id is required.");
+                }
+
+                if (empty($additionalExpense->getCode())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": additional expense expense_code is required.");
+                }
+
+                if (empty($additionalExpense->getTitle())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": additional expense title is required.");
+                }
+
+                if (empty($additionalExpense->getAmount())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": additional expense amount is required.");
+                }
+            }
+        }
+    }
+
+    private function validateSyncRefunds(): void
+    {
+        if (empty($this->id)) {
+            throw new ValidationException('Tour: id is required.');
+        }
+
+        foreach ($this->getGuides() as $guide) {
+            $cardNumber = $guide->getCardNumber();
+
+            if (empty($cardNumber)) {
+                throw new ValidationException('Guide: card number is required.');
+            }
+
+            $refunds = $guide->getRefunds();
+
+            if (empty($refunds)) {
+                throw new ValidationException("Guide with card number \"{$cardNumber}\": at least one refund is required.");
+            }
+
+            foreach ($refunds as $refund) {
+                if (empty($refund->getId())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": refund external_expense_id is required.");
+                }
+
+                if (empty($refund->getCode())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": refund expense_code is required.");
+                }
+
+                if (empty($refund->getTitle())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": refund title is required.");
+                }
+
+                if (empty($refund->getAmount())) {
+                    throw new ValidationException("Guide with card number \"{$cardNumber}\": refund amount is required.");
                 }
             }
         }

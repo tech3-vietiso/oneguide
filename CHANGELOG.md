@@ -2,6 +2,23 @@
 
 Các thay đổi đáng chú ý của SDK sẽ được ghi lại trong file này.
 
+## V0.2.3
+
+### Tính năng mới
+
+Thêm hai chức năng đồng bộ chi phí của hướng dẫn viên, dùng chung cách khai báo với tạm ứng (`Tour::addGuide()` rồi gọi hàm đồng bộ):
+
+| Chức năng | Lớp dữ liệu | Hàm | Endpoint |
+| --- | --- | --- | --- |
+| Chi bổ sung (phát sinh ngoài tạm ứng) | `Guide\AdditionalExpense` + `Guide::addAdditionalExpense()` | `Tour::syncAdditionalExpenses()` | `POST integration-tours/{id}/sync-additional-expenses` |
+| Hoàn tạm ứng | `Guide\Refund` + `Guide::addRefund()` | `Tour::syncRefunds()` | `POST integration-tours/{id}/sync-advance-refunds` |
+
+- Cả hai lớp bắt buộc: `setId()` (`external_expense_id`), `setCode()` (`expense_code`), `setTitle()`, `setAmount()`; tùy chọn: `setCurrency()`, `setNote()`.
+- Khác với tạm ứng, cả hai đều **không có** `tour_service_id` vì chi bổ sung và hoàn tạm ứng không gắn với dịch vụ nào của tour.
+- Payload của cả hai endpoint dùng chung khóa `guides[].expenses[]` như `sync-expenses`; phía OneGuide lưu vào bảng `expenses` với `type` riêng (`2 = chi bổ sung`, `3 = hoàn tạm ứng`).
+
+Cả hai đều kiểm tra `Tour::setId()` trước khi gửi và ném `ValidationException` nếu thiếu trường bắt buộc. Không có breaking change so với V0.2.2 — `sync()`, `inviteGuides()` và `syncAdvances()` giữ nguyên payload.
+
 ## V0.2.2
 
 ### Tính năng mới
