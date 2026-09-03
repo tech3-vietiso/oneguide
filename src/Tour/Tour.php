@@ -336,6 +336,21 @@ class Tour
     }
 
     /**
+     * Xoá các phiếu đã đồng bộ trước đó (tạm ứng / chi bổ sung / hoàn tạm ứng).
+     * Hướng dẫn viên sẽ nhận email báo phiếu đã bị huỷ.
+     *
+     * @param array $expenseIds Các `external_expense_id` — chính là giá trị đã gửi ở setId().
+     */
+    public function deleteExpenses(array $expenseIds)
+    {
+        $this->validateDeleteExpenses($expenseIds);
+
+        $this->client->send("integration-tours/{$this->getId()}/delete-expenses", [
+            'expenses' => array_values($expenseIds)
+        ]);
+    }
+
+    /**
      * Tình trạng xác nhận của từng hướng dẫn viên đã được mời vào tour.
      * Không phân trang vì một tour chỉ có vài hướng dẫn viên.
      *
@@ -586,6 +601,23 @@ class Tour
                 if (empty($advance->getAmount())) {
                     throw new ValidationException("Guide with card number \"{$cardNumber}\": advance amount is required.");
                 }
+            }
+        }
+    }
+
+    private function validateDeleteExpenses(array $expenseIds): void
+    {
+        if (empty($this->id)) {
+            throw new ValidationException('Tour: id is required.');
+        }
+
+        if (empty($expenseIds)) {
+            throw new ValidationException('Tour: at least one expense id is required.');
+        }
+
+        foreach ($expenseIds as $expenseId) {
+            if (empty($expenseId)) {
+                throw new ValidationException('Tour: expense external_expense_id is required.');
             }
         }
     }

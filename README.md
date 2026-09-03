@@ -255,7 +255,24 @@ $tour->syncRefunds(); // Ném ValidationException nếu thiếu trường bắt 
 
 Xem đầy đủ tại [examples/sync-guide-refunds.php](examples/sync-guide-refunds.php).
 
-### 6. Lấy danh mục có phân trang (tỉnh/thành)
+### 6. Xoá phiếu đã đồng bộ
+
+Xoá các phiếu đã đẩy sang OneGuide ở mục 3–5 (tạm ứng, chi bổ sung, hoàn tạm ứng). Chỉ định bằng `external_expense_id` — chính giá trị đã gửi ở `setId()`.
+
+```php
+use Vietiso\OneGuide\Tour\Tour;
+
+$tour = new Tour($client);
+$tour->setId(111);
+
+$tour->deleteExpenses([1001, 2001]); // Ném ValidationException nếu thiếu id tour hoặc danh sách rỗng
+```
+
+Phiếu bị xoá sẽ biến mất khỏi màn hình của hướng dẫn viên và **hướng dẫn viên nhận email báo phiếu đã bị huỷ**. Khoản chi do chính hướng dẫn viên nhập cho nhà cung cấp không bị ảnh hưởng.
+
+Xem đầy đủ tại [examples/delete-guide-expenses.php](examples/delete-guide-expenses.php).
+
+### 7. Lấy danh mục có phân trang (tỉnh/thành)
 
 API trả về dữ liệu theo con trỏ (cursor). `list()` trả về một `Collection`; có thể duyệt trực tiếp bằng `foreach` (tự động lấy trang tiếp theo) hoặc lặp thủ công.
 
@@ -282,9 +299,9 @@ while ($page->hasMore()) {
 
 Xem đầy đủ tại [examples/get-province.php](examples/get-province.php).
 
-### 7. Lấy danh sách feedback của tour
+### 8. Lấy danh sách feedback của tour
 
-Lấy các feedback (ảnh/video) mà hướng dẫn viên gửi về cho một tour. Kết quả phân trang theo con trỏ giống mục 6, trả về `Collection`.
+Lấy các feedback (ảnh/video) mà hướng dẫn viên gửi về cho một tour. Kết quả phân trang theo con trỏ giống mục 7, trả về `Collection`.
 
 ```php
 use Vietiso\OneGuide\Tour\Tour;
@@ -310,7 +327,7 @@ Cần `setId()` trước khi gọi, nếu không sẽ ném `ValidationException`
 
 Xem đầy đủ tại [examples/get-tour-feedbacks.php](examples/get-tour-feedbacks.php).
 
-### 8. Xem tình trạng xác nhận của hướng dẫn viên
+### 9. Xem tình trạng xác nhận của hướng dẫn viên
 
 Sau khi mời (mục 2), hướng dẫn viên tự nhận hoặc từ chối tour. Hàm này cho biết ai đã phản hồi, ai còn đang chờ. Kết quả **không phân trang** vì một tour chỉ có vài hướng dẫn viên.
 

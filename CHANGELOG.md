@@ -2,6 +2,25 @@
 
 Các thay đổi đáng chú ý của SDK sẽ được ghi lại trong file này.
 
+## V0.2.4
+
+### Tính năng mới
+
+Thêm `Tour::deleteExpenses(array $expenseIds)` — xoá các phiếu đã đồng bộ (tạm ứng, chi bổ sung, hoàn tạm ứng) theo `external_expense_id`.
+
+```php
+$tour = new Tour($client);
+$tour->setId(111);
+
+$tour->deleteExpenses([1001, 2001]);
+```
+
+- Endpoint: `POST integration-tours/{id}/delete-expenses`, payload `{"expenses": [1001, 2001]}`.
+- Ném `ValidationException` nếu thiếu id tour hoặc danh sách rỗng.
+- Phía OneGuide xoá mềm phiếu, đồng thời **gửi email báo hướng dẫn viên phiếu đã bị huỷ**. Khoản chi do chính hướng dẫn viên nhập cho nhà cung cấp không bị ảnh hưởng.
+
+Không có breaking change so với V0.2.3.
+
 ## V0.2.3
 
 ### Tính năng mới
